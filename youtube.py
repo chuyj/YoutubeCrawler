@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #file: hw1-2.py
-import urllib
+import urllib.parse
 import argparse
 import requests
 from bs4 import BeautifulSoup
@@ -11,7 +11,7 @@ parser.add_argument('-p', default = 1, type = int, help = 'page that you parse')
 parser.add_argument('keyword', nargs = '*')
 args = parser.parse_args()
 if not args.keyword: parser.error('Must Specify Keyword')
-query = '+'.join([urllib.quote_plus(keyword) for keyword in args.keyword])
+query = '+'.join([urllib.parse.quote_plus(keyword) for keyword in args.keyword])
 youtubeurl = 'https://www.youtube.com/results?search_query={}&sp=EgIQAQ%253D%253D&page={}'
 requests.packages.urllib3.disable_warnings()
 while args.n > 0 :	
@@ -28,11 +28,11 @@ while args.n > 0 :
 		like_soup = BeautifulSoup(likepage.content, 'html.parser')
 		like = like_soup.find_all('button', {'class': 'yt-uix-button yt-uix-button-size-default yt-uix-button-opacity yt-uix-button-has-icon no-icon-markup like-button-renderer-like-button like-button-renderer-like-button-unclicked yt-uix-clickcard-target   yt-uix-tooltip'})
 		dislike = like_soup.find_all('button', {'class': 'yt-uix-button yt-uix-button-size-default yt-uix-button-opacity yt-uix-button-has-icon no-icon-markup like-button-renderer-dislike-button like-button-renderer-dislike-button-unclicked yt-uix-clickcard-target   yt-uix-tooltip'})
-		urlfit = requests.get('https://developer.url.fit/api/shorten?long_url=' + urllib.quote_plus(likepage_url), verify = False).json()['url']
-		print title + ' (https://url.fit/' + urlfit + ')'
+		urlfit = requests.get('https://developer.url.fit/api/shorten?long_url=' + urllib.parse.quote_plus(likepage_url), verify = False).json()['url']
+		print(title + ' (https://url.fit/' + urlfit + ')')
 		if (discrip):
-			print discrip.text
+			print(discrip.text)
 		if (len(like) != 0):
-			print 'Like: ' + like[0].text + ', Dislike: ' + dislike[0].text;
-		print ''
+			print('Like: ' + like[0].text + ', Dislike: ' + dislike[0].text)
+		print('')
 	args.p, args.n = args.p + 1, args.n - 20
